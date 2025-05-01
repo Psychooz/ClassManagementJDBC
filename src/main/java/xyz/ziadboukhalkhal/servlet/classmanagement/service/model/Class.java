@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class Class {
-    private long id;
+    private Long id;
     private String name;
     private String description;
     private String schedule;

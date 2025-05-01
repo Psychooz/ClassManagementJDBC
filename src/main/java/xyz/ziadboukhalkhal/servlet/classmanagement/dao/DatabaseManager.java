@@ -43,7 +43,7 @@ public class DatabaseManager {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Unable to establish database connection", e);
         }
         return connection;
     }

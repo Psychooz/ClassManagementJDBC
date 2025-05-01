@@ -10,15 +10,14 @@
 <html>
 <head>
   <title>Items</title>
-  <link href="webjars/bootstrap/4.6.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="webjars/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
-  <link href="webjars/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <link href="webjars/font-awesome/4.7.0/css/font-awesome.min-jsf.css" rel="stylesheet">
-  <link href="webjars/font-awesome/4.7.0/css/font-awesome-jsf.css" rel="stylesheet">
+  <link href="webjars/font-awesome/6.7.2/css/fontawesome.css" rel="stylesheet">
+  <link href="webjars/font-awesome/6.7.2/css/fontawesome.min.css" rel="stylesheet">
+  <link href="webjars/font-awesome/6.7.2/css/fontawesome-jsf.css" rel="stylesheet">
+  <link href="webjars/font-awesome/6.7.2/css/fontawesome.min-jsf.css" rel="stylesheet">
   <link href="webjars/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
   <link href="webjars/ionicons/2.0.1/css/ionicons.css" rel="stylesheet">
-  <script src="webjars/jquery/3.6.0/jquery.min.js"></script>
-  <script src="webjars/bootstrap/4.6.1/js/bootstrap.min.js"></script>
+  <script src="webjars/jquery/3.7.1/jquery.min.js"></script>
+  <link href="webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <%@include file="common/header.jsp"%>

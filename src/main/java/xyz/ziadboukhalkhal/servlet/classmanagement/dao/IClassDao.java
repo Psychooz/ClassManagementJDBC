@@ -8,5 +8,5 @@ public interface IClassDao {
     void create(Class cls);
     void update(Class cls);
     void delete(Long id);
-    List<Class> search(String keyword);
+    List<Class> search(String keyword,String teacher, String room);
 }

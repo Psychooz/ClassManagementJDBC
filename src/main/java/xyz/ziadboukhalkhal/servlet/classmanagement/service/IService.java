@@ -11,5 +11,5 @@ public interface IService {
     void createClass(xyz.ziadboukhalkhal.servlet.classmanagement.service.model.Class cls);
     void updateClass(xyz.ziadboukhalkhal.servlet.classmanagement.service.model.Class cls);
     void deleteClass(Long id);
-    List<Class> searchClasses(String keyword);
+    List<Class> searchClasses(String keyword, String teacher, String room);
 }

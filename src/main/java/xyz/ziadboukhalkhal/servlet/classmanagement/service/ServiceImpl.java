@@ -45,7 +45,14 @@ public class ServiceImpl implements IService {
     }
 
     @Override
-    public List<Class> searchClasses(String keyword) {
-        return classDao.search(keyword);
+    public List<Class> searchClasses(String keyword, String teacher, String room) {
+        // Implement multi-criteria search
+        if ((keyword == null || keyword.isEmpty()) &&
+                (teacher == null || teacher.isEmpty()) &&
+                (room == null || room.isEmpty())) {
+            return classDao.findAll();
+        }
+
+        return classDao.search(keyword, teacher, room);
     }
 }

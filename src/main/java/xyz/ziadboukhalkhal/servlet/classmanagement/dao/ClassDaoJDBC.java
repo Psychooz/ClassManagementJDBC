@@ -4,6 +4,7 @@ import xyz.ziadboukhalkhal.servlet.classmanagement.service.model.Class;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 public class ClassDaoJDBC implements IClassDao {
 
     @Override
@@ -67,11 +68,13 @@ public class ClassDaoJDBC implements IClassDao {
             stmt.setString(4, cls.getTeacher());
             stmt.setString(5, cls.getRoom());
 
-            stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();
 
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    cls.setId(generatedKeys.getLong(1));
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        cls.setId(generatedKeys.getLong(1));
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -95,6 +98,7 @@ public class ClassDaoJDBC implements IClassDao {
             stmt.executeUpdate();
         } catch (SQLException e) {
             handleSQLException(e);
+            throw new RuntimeException("Error updating class with ID: " + cls.getId(), e);
         }
     }
 
@@ -111,28 +115,41 @@ public class ClassDaoJDBC implements IClassDao {
     }
 
     @Override
-    public List<Class> search(String keyword) {
+    public List<Class> search(String keyword, String teacher, String room) {
         List<Class> classes = new ArrayList<>();
-        try (Connection connection = DatabaseManager.getInstance().getConnection();
-             PreparedStatement stmt = connection.prepareStatement(
-                     "SELECT * FROM class WHERE name LIKE ? OR description LIKE ? OR teacher LIKE ?")) {
+        try (Connection connection = DatabaseManager.getInstance().getConnection()) {
+            StringBuilder sql = new StringBuilder("SELECT * FROM class WHERE 1=1");
+            List<Object> params = new ArrayList<>();
 
-            String searchPattern = "%" + keyword + "%";
-            stmt.setString(1, searchPattern);
-            stmt.setString(2, searchPattern);
-            stmt.setString(3, searchPattern);
+            if (keyword != null && !keyword.isEmpty()) {
+                sql.append(" AND (name LIKE ? OR description LIKE ?)");
+                params.add("%" + keyword + "%");
+                params.add("%" + keyword + "%");
+            }
+            if (teacher != null && !teacher.isEmpty()) {
+                sql.append(" AND teacher LIKE ?");
+                params.add("%" + teacher + "%");
+            }
+            if (room != null && !room.isEmpty()) {
+                sql.append(" AND room LIKE ?");
+                params.add("%" + room + "%");
+            }
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    classes.add(new Class(
-                            rs.getLong("id"),
-                            rs.getString("name"),
-                            rs.getString("description"),
-                            rs.getString("schedule"),
-                            rs.getString("teacher"),
-                            rs.getString("room")
-                    ));
-                }
+            PreparedStatement stmt = connection.prepareStatement(sql.toString());
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                classes.add(new Class(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getString("schedule"),
+                        rs.getString("teacher"),
+                        rs.getString("room")
+                ));
             }
         } catch (SQLException e) {
             handleSQLException(e);
